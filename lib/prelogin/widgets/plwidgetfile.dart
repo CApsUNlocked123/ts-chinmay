@@ -44,7 +44,7 @@ Widget OBMainCard(name) {
 }
 
 
-Widget ContainerCard(std, ifclass, ifselected){
+Widget ContainerCard(std, usageon, ifselected,){
   return Container(
     width: width*0.35,
     height: height * 0.02,
@@ -55,7 +55,7 @@ Widget ContainerCard(std, ifclass, ifselected){
       color: ifselected == true? Color(0xFF7E1185):Color(0xffe1e1e1),//0xffe1e1e1
     ),
     child: Center(
-      child: ifclass == true? Text(
+      child: usageon == "Class"? Text(
         "Class ${std}",
         textAlign: TextAlign.center,
         style: TextStyle(

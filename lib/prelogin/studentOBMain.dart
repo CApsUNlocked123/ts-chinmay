@@ -92,7 +92,7 @@ class _StudentFirstOBState extends State<StudentFirstOB> {
                               },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child:  tapindex==index+1 ? ContainerCard(index + 1, true, true): ContainerCard(index + 1, true, false),
+                                    child:  tapindex==index+1 ? ContainerCard(index + 1, "Class", true): ContainerCard(index + 1, "Class", false),
                                   )),
                             ),
                           );
@@ -141,10 +141,11 @@ class _StudentFirstOBState extends State<StudentFirstOB> {
                         child: InkWell(
                           onTap: (){
                             if (classvalue!= null){
-                              signupdata = {
-                                "class": classvalue.toString(),
-
-                              };
+                              // signupdata = {
+                              //   "Topics": classvalue.toString(),
+                              //
+                              // };
+                              signupdata.putIfAbsent("Class", () => classvalue.toString());
                               Navigator.push(context,MaterialPageRoute(builder: (context) => StudentSecondOB()
                               ));
                             }
@@ -188,81 +189,147 @@ class StudentSecondOB extends StatefulWidget {
 
 class _StudentSecondOBState extends State<StudentSecondOB> {
   List<String> Selectedtopics=[];
+  var orientation;
   bool processing = false;
   List<String> topiclist = ["Maths", "Science", "Language", "Arts", "Yoga", "Social", "Coding & Technology", "Soft Skills", "Ethics"];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
+    orientation = MediaQuery.of(context).orientation;
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
           height: height,
           width: width,
-          color: Colors.blue.withOpacity(0.8),
+          color: Colors.white,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: 20.0,
+                height: height * 0.08,
               ),
-              Text(
-                "Select preferred topics of interest",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              SizedBox(
-                height: height * 0.8,
-                child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: processing == true
-                        ? SizedBox(
-                      height: 100.0,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.blue,
-                        ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Select Topics",
+                        style: GoogleFonts.nunito(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF7E1185)),
                       ),
-                    )
-                        : ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Please select topics of your interests.",
+                        style: GoogleFonts.nunito(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF6E6E6E)),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+
+                    Container(
+                      height: height*0.5,
+                      width: width * 0.95,
+
+                      color: Colors.transparent,
+                      child: GridView.builder(
+                        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: (orientation == Orientation.portrait) ? 3 : 3),
                         itemCount: topiclist.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                              tileColor: Selectedtopics.contains(topiclist[index])?Colors.green:Colors.white,
-                              title: InkWell(
-                                  onTap: () {
+                          return new Card(
+                            child: new GridTile(
+                              child: InkWell(onTap:(){
+
                                     setState(() {
-                                      if (Selectedtopics.contains(topiclist[index])){
-                                        Selectedtopics.remove(topiclist[index]);
-                                      }
-                                      else Selectedtopics.add(topiclist[index]);
-                                    });
-                                  },
+                                if (Selectedtopics.contains(topiclist[index])){
+                                Selectedtopics.remove(topiclist[index]);
+                                }
+                                else Selectedtopics.add(topiclist[index]);
+                                });
+
+
+                              },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: CategoryBox(topiclist[index]),
-                                  )));
-                        })),
-              ),
-              SizedBox(height: 5.0,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: (){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StudentThirdOB()));
+                                    child:  Selectedtopics.contains(topiclist[index]) ? ContainerCard(topiclist[index], true, true): ContainerCard(topiclist[index], true, false),
+                                  )),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
 
-                    },
-                    child: Icon(Icons.arrow_forward, size: 50.0, color: Colors.white,),
-                  ),
-                  SizedBox(width: 5.0,),
-                ],
-              ),
+
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Center(
+                      child: Container(
+                        height: height * 0.065,
+                        width: width * 0.83,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF7E1185),
+                          borderRadius: BorderRadius.circular(14.0),
+                          border: Border(
+                            top: BorderSide(
+                              color: Color(
+                                0xffbdbdbd,
+                              ),
+                              width: 1,
+                            ),
+                            right: BorderSide(
+                              color: Color(
+                                0xffbdbdbd,
+                              ),
+                              width: 1,
+                            ),
+                            bottom: BorderSide(
+                              color: Color(
+                                0xffbdbdbd,
+                              ),
+                              width: 1,
+                            ),
+                            left: BorderSide(
+                              color: Color(
+                                0xffbdbdbd,
+                              ),
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        child: InkWell(
+                          onTap: (){
+                            if (Selectedtopics != null ){
+                              // signupdata = {
+                              //   "class": Selectedtopics.toString(),
+                              //
+                              // };
+                              signupdata.putIfAbsent("Topics", () => Selectedtopics.toString());
+                              Navigator.push(context,MaterialPageRoute(builder: (context) => StudentThirdOB()
+                              ));
+                            }
+
+
+                          },
+                          child: Center(
+                            child: Text(
+                              "Confirm", style: GoogleFonts.nunito(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -270,7 +337,12 @@ class _StudentSecondOBState extends State<StudentSecondOB> {
     );
   }
 }
-
+// setState(() {
+// if (Selectedtopics.contains(topiclist[index])){
+// Selectedtopics.remove(topiclist[index]);
+// }
+// else Selectedtopics.add(topiclist[index]);
+// });CategoryBox(topiclist[index])
 //################# Second Screen ####################
 
 
@@ -286,79 +358,146 @@ class StudentThirdOB extends StatefulWidget {
 
 class _StudentThirdOBState extends State<StudentThirdOB> {
   List<String> Selectedlang=[];
+  var orientation;
   bool processing = false;
   List<String> LanguageList = ["English", "Hindi", "Marathi", "Gujrathi", "Telugu", "Tamil", "Kannada", "Malyalam"];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
+    orientation = MediaQuery.of(context).orientation;
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
           height: height,
           width: width,
-          color: Colors.blue.withOpacity(0.8),
+          color: Colors.white,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: 20.0,
+                height: height * 0.08,
               ),
-              Text(
-                "Select preferred langauges",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              SizedBox(
-                height: height * 0.8,
-                child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: processing == true
-                        ? SizedBox(
-                      height: 100.0,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.blue,
-                        ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Select Language",
+                        style: GoogleFonts.nunito(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF7E1185)),
                       ),
-                    )
-                        : ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Please select language you speak.",
+                        style: GoogleFonts.nunito(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF6E6E6E)),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+
+                    Container(
+                      height: height*0.5,
+                      width: width * 0.95,
+
+                      color: Colors.transparent,
+                      child: GridView.builder(
+                        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: (orientation == Orientation.portrait) ? 3 : 3),
                         itemCount: LanguageList.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                              tileColor: Selectedlang.contains(LanguageList[index])?Colors.green:Colors.white,
-                              title: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (Selectedlang.contains(LanguageList[index])){
-                                        Selectedlang.remove(LanguageList[index]);
-                                      }
-                                      else Selectedlang.add(LanguageList[index]);
-                                    });
+                          return new Card(
+                            child: new GridTile(
+                              child: InkWell(onTap:(){
 
-                                  },
+                                setState(() {
+                                  if (Selectedlang.contains(LanguageList[index])){
+                                    Selectedlang.remove(LanguageList[index]);
+                                  }
+                                  else Selectedlang.add(LanguageList[index]);
+                                });
+
+
+                              },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: LanguageBox(LanguageList[index]),
-                                  )));
-                        })),
-              ),
-              SizedBox(height: 5.0,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: (){},
-                    child: Icon(Icons.arrow_forward, size: 50.0, color: Colors.white,),
-                  ),
-                  SizedBox(width: 5.0,),
-                ],
-              ),
+                                    child:  Selectedlang.contains(LanguageList[index]) ? ContainerCard(LanguageList[index], true, true): ContainerCard(LanguageList[index], true, false),
+                                  )),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Center(
+                      child: Container(
+                        height: height * 0.065,
+                        width: width * 0.83,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF7E1185),
+                          borderRadius: BorderRadius.circular(14.0),
+                          border: Border(
+                            top: BorderSide(
+                              color: Color(
+                                0xffbdbdbd,
+                              ),
+                              width: 1,
+                            ),
+                            right: BorderSide(
+                              color: Color(
+                                0xffbdbdbd,
+                              ),
+                              width: 1,
+                            ),
+                            bottom: BorderSide(
+                              color: Color(
+                                0xffbdbdbd,
+                              ),
+                              width: 1,
+                            ),
+                            left: BorderSide(
+                              color: Color(
+                                0xffbdbdbd,
+                              ),
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        child: InkWell(
+                          onTap: (){
+                            if (Selectedlang != null ){
+                              // signupdata = {
+                              //   "Language": Selectedlang.toString(),
+                              //
+                              // };
+                              signupdata.putIfAbsent("Language", () => Selectedlang.toString());
+                              print(signupdata);
+                            }
+
+
+                          },
+                          child: Center(
+                            child: Text(
+                              "Confirm", style: GoogleFonts.nunito(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
